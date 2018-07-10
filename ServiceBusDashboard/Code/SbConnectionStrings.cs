@@ -24,8 +24,8 @@ namespace ServiceBusDashboard.Code
         public void Load()
         {
             var rootPath = HostingEnvironment.MapPath("~/");
-            var connectionStringsContent = ConfigurationManager.AppSettings["SbConnectionStrings"];
-            var connectionStringsFile = new FileInfo(Path.Combine(rootPath, connectionStringsContent));
+            var connectionStrings = ConfigurationManager.AppSettings["SbConnectionStrings"];
+            var connectionStringsFile = new FileInfo(Path.Combine(rootPath, connectionStrings));
             if (connectionStringsFile.Exists)
             {
                 var json = File.ReadAllText(connectionStringsFile.FullName);
@@ -35,8 +35,8 @@ namespace ServiceBusDashboard.Code
             {
                 ConnectionStrings = new[] { new SbConnectionString()
                 {
-                    Name = connectionStringsContent,
-                    ConnectionString = connectionStringsContent
+                    Name = connectionStrings,
+                    ConnectionString = connectionStrings
                 } };
             }
         }

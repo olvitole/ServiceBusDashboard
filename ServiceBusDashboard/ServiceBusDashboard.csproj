@@ -135,13 +135,21 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Code\Config.cs" />
     <Compile Include="Code\RazorUtil.cs" />
     <Compile Include="Code\SbConnectionStrings.cs" />
+    <Compile Include="Code\SbUtil.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Model\CountContainer.cs" />
+    <Compile Include="Model\SbDashboardModel.cs" />
+    <Compile Include="Model\SbExcludingSubscription.cs" />
+    <Compile Include="Model\SbQueue.cs" />
+    <Compile Include="Model\SbSubscription.cs" />
+    <Compile Include="Model\SbTopic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
