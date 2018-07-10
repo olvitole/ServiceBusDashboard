@@ -1,0 +1,10 @@
+[
+	{
+		"Name": "Sample",
+		"ConnectionString": "your service bus connection string"
+	},
+	{
+		"Name": "Another example",
+		"ConnectionString": "your service bus connection string"
+	}
+]

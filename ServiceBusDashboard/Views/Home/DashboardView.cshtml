@@ -1,0 +1,69 @@
+﻿@model ServiceBusDashboard.Controllers.DashboardModel
+
+@{
+    Layout = null;
+    var bgColor1 = "pt-2 pl-2 alternate";
+    var bgColor2 = "pt-2 pl-2 non-alternate";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h1>@Model.ConnectionString.Name</h1>
+        <span class="form-control" rel="tooltip" title="@Model.ConnectionString.ConnectionString">@Model.ConnectionString.ConnectionString</span>
+        <div id="status"></div>
+    </div>
+    <div class="col-sm-6">
+        <h2>Queues</h2>
+        @for (var queueIndex = 0; queueIndex < Model.Queues.Length; queueIndex++)
+        {
+            var queue = Model.Queues[queueIndex];
+            <div class="row @(queueIndex % 2 == 0 ? bgColor1 : bgColor2)">
+                <div class="col-sm-10"><span rel="tooltip" title="@queue.Name">@queue.Name</span></div>
+                <div class="col-sm-1">
+                    @if (queue.ShowNumbers)
+                    {<span class="@queue.ActiveMessageCountColor" rel="tooltip" title="@queue.ActiveMessageCount">@queue.ActiveMessageCount</span>}
+                </div>
+                <div class="col-sm-1">
+                    @if (queue.ShowNumbers)
+                    {<span class="@queue.DeadLetterMessageCountColor" rel="tooltip" title="@queue.DeadLetterMessageCount">@queue.DeadLetterMessageCount</span>}
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-sm-6">
+        <h2>Topics</h2>
+        @for (var topicIndex = 0; topicIndex < Model.Topics.Length; topicIndex++)
+        {
+            var topic = Model.Topics[topicIndex];
+            <div class="@(topicIndex % 2 == 0 ? bgColor1 : bgColor2)">
+                <div class="row">
+                    <div class="col-sm-10"><span rel="tooltip" title="@topic.Name">@topic.Name</span></div>
+                    <div class="col-sm-1">
+                        @if (topic.ShowNumbers)
+                        {<span class="@topic.SubscriptionsActiveMessageCountColor" rel="tooltip" title="@topic.SubscriptionsActiveMessageCount">@topic.SubscriptionsActiveMessageCount</span>}
+                    </div>
+                    <div class="col-sm-1">
+                        @if (topic.ShowNumbers)
+                        {<span class="@topic.SubscriptionsDeadLetterMessageCountColor" rel="tooltip" title="@topic.SubscriptionsDeadLetterMessageCount">@topic.SubscriptionsDeadLetterMessageCount</span>}
+                    </div>
+                </div>
+                @foreach (var subscription in topic.Subscriptions)
+                {
+                    <div class="row">
+                        <div class="col-sm-9 offset-sm-1">
+                            <span rel="tooltip" title="@subscription.Name" class="@(subscription.Excluded ? "strikethrough":"")">@subscription.Name</span>
+                        </div>
+                        <div class="col-sm-1">
+                            @if (subscription.ShowNumbers)
+                            {<span class="@subscription.ActiveMessageCountColor" rel="tooltip" title="@subscription.ActiveMessageCount">@subscription.ActiveMessageCount</span>}
+                        </div>
+                        <div class="col-sm-1">
+                            @if (subscription.ShowNumbers)
+                            {<span class="@subscription.DeadLetterMessageCountColor" rel="tooltip" title="@subscription.DeadLetterMessageCount">@subscription.DeadLetterMessageCount</span>}
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

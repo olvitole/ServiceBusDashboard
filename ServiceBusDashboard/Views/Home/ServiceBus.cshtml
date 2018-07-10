@@ -1,0 +1,37 @@
+﻿@model ServiceBusDashboard.Code.SbConnectionString
+
+<div class="container-fluid" id="container">
+    <div class="pt-4">Loading...</div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        var refreshed = null;
+        $(function() {
+            setInterval(() => { getDashboard(); }, 14000);
+            setInterval(() => { updateStatus(); }, 500);
+            getDashboard();
+        });
+
+        function updateStatus() {
+            if (refreshed !== null) {
+                var diff = moment().seconds(moment().diff(refreshed, 'seconds'));
+                $('#status').html("Refreshed: " + (diff.format('s [seconds ago]')));
+            }
+        }
+
+        function getDashboard() {
+            refreshed = null;
+            $('#status').html("Refreshing...");
+
+            $.get('/dashboard/@Model.Name')
+                .done(function(data, textStatus, jqXhr) {
+                    refreshed = moment();
+                    $('#container').html(data);
+                    updateStatus();
+                })
+                .fail(function(jqXhr, textStatus, errorThrown) {
+                    $('#container').html("Error: " + errorThrown);
+                });
+        }
+    </script>
+}

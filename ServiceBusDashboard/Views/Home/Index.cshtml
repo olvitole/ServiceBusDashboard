@@ -1,0 +1,20 @@
+﻿@model ServiceBusDashboard.Code.SbConnectionString[]
+
+<div class="container-fluid">
+    <h1>List</h1>
+    <a href="/Home/ReloadList" class="btn btn-primary float-right">Reload list</a>
+
+    @if (Model == null || Model.Length <= 0)
+    {
+        <div>
+            No connection string found!
+        </div>
+    }
+    else
+    {
+        foreach (var connectionString in Model)
+        {
+            <a href="/Home/ServiceBus?name=@connectionString.Name" class="btn btn-info">@connectionString.Name</a>
+        }
+    }
+</div>
