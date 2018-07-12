@@ -2,16 +2,11 @@
 
 @{
     Layout = null;
-    var bgColor1 = "pt-2 pl-2 alternate";
-    var bgColor2 = "pt-2 pl-2 non-alternate";
+    var bgColor1 = "pt-2 ml-1 mr-1 alternate";
+    var bgColor2 = "pt-2 ml-1 mr-1 non-alternate";
 }
 
 <div class="row">
-    <div class="col-sm-12">
-        <h1>@Model.ConnectionString.Name</h1>
-        <span class="form-control" rel="tooltip" title="@Model.ConnectionString.ConnectionString">@Model.ConnectionString.ConnectionString</span>
-        <div id="status"></div>
-    </div>
     <div class="col-sm-6">
         <h2>Queues</h2>
         @for (var queueIndex = 0; queueIndex < Model.Queues.Length; queueIndex++)
@@ -35,35 +30,36 @@
         @for (var topicIndex = 0; topicIndex < Model.Topics.Length; topicIndex++)
         {
             var topic = Model.Topics[topicIndex];
-            <div class="@(topicIndex % 2 == 0 ? bgColor1 : bgColor2)">
-                <div class="row">
-                    <div class="col-sm-10"><span rel="tooltip" title="@topic.Name">@topic.Name</span></div>
-                    <div class="col-sm-1">
-                        @if (topic.ShowNumbers)
-                        {<span class="@topic.SubscriptionsActiveMessageCountColor" rel="tooltip" title="@topic.SubscriptionsActiveMessageCount">@topic.SubscriptionsActiveMessageCount</span>}
+            <div class="row @(topicIndex % 2 == 0 ? bgColor1 : bgColor2)">
+                <div class="col-sm-10"><span rel="tooltip" title="@topic.Name" class="pl-2">+ @topic.Name</span></div>
+                <div class="col-sm-1">
+                    @if (topic.ShowNumbers)
+                    {<span class="@topic.SubscriptionsActiveMessageCountColor" rel="tooltip" title="@topic.SubscriptionsActiveMessageCount">@topic.SubscriptionsActiveMessageCount</span>}
+                </div>
+                <div class="col-sm-1">
+                    @if (topic.ShowNumbers)
+                    {<span class="@topic.SubscriptionsDeadLetterMessageCountColor" rel="tooltip" title="@topic.SubscriptionsDeadLetterMessageCount">@topic.SubscriptionsDeadLetterMessageCount</span>}
+                </div>
+            </div>
+            for (var subscriptionIndex = 0; subscriptionIndex < topic.Subscriptions.Length; subscriptionIndex++)
+            {
+                var subscription = topic.Subscriptions[subscriptionIndex];
+                var firstColor = topicIndex % 2 == 0 ? bgColor2 : bgColor1;
+                var secondColor = topicIndex % 2 == 0 ? bgColor1 : bgColor2;
+                <div class="row @(subscriptionIndex % 2 == 0 ? firstColor : secondColor)">
+                    <div class="col-sm-9 offset-sm-1">
+                        <span rel="tooltip" title="@subscription.Name" class="@(subscription.Excluded ? "strikethrough":"")">- @subscription.Name</span>
                     </div>
                     <div class="col-sm-1">
-                        @if (topic.ShowNumbers)
-                        {<span class="@topic.SubscriptionsDeadLetterMessageCountColor" rel="tooltip" title="@topic.SubscriptionsDeadLetterMessageCount">@topic.SubscriptionsDeadLetterMessageCount</span>}
+                        @if (subscription.ShowNumbers)
+                        {<span class="@subscription.ActiveMessageCountColor" rel="tooltip" title="@subscription.ActiveMessageCount">@subscription.ActiveMessageCount</span>}
+                    </div>
+                    <div class="col-sm-1">
+                        @if (subscription.ShowNumbers)
+                        {<span class="@subscription.DeadLetterMessageCountColor" rel="tooltip" title="@subscription.DeadLetterMessageCount">@subscription.DeadLetterMessageCount</span>}
                     </div>
                 </div>
-                @foreach (var subscription in topic.Subscriptions)
-                {
-                    <div class="row">
-                        <div class="col-sm-9 offset-sm-1">
-                            <span rel="tooltip" title="@subscription.Name" class="@(subscription.Excluded ? "strikethrough":"")">@subscription.Name</span>
-                        </div>
-                        <div class="col-sm-1">
-                            @if (subscription.ShowNumbers)
-                            {<span class="@subscription.ActiveMessageCountColor" rel="tooltip" title="@subscription.ActiveMessageCount">@subscription.ActiveMessageCount</span>}
-                        </div>
-                        <div class="col-sm-1">
-                            @if (subscription.ShowNumbers)
-                            {<span class="@subscription.DeadLetterMessageCountColor" rel="tooltip" title="@subscription.DeadLetterMessageCount">@subscription.DeadLetterMessageCount</span>}
-                        </div>
-                    </div>
-                }
-            </div>
+            }
         }
     </div>
 </div>
