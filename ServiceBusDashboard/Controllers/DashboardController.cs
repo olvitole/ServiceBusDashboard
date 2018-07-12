@@ -37,7 +37,7 @@ namespace ServiceBusDashboard.Controllers
                     .Select(x => new SbQueue()
                     {
                         Name = x.Path,
-                        ActiveMessageCount = x.MessageCount,
+                        ActiveMessageCount = x.MessageCountDetails.ActiveMessageCount,
                         DeadLetterMessageCount = x.MessageCountDetails.DeadLetterMessageCount
                     })
                     .ToArray(),
@@ -53,7 +53,7 @@ namespace ServiceBusDashboard.Controllers
                             .Select(xx => new SbSubscription()
                             {
                                 Name = xx.Name,
-                                ActiveMessageCount = xx.MessageCount,
+                                ActiveMessageCount = xx.MessageCountDetails.ActiveMessageCount,
                                 DeadLetterMessageCount = xx.MessageCountDetails.DeadLetterMessageCount
                             })
                         .ToArray()
