@@ -6,11 +6,25 @@
 @section scripts {
     <script type="text/javascript">
         var refreshed = null;
+        var createdTimeout = null;
         $(function() {
-            setInterval(() => { getDashboard(); }, 14000);
             setInterval(() => { updateStatus(); }, 500);
             getDashboard();
         });
+
+        function next() {
+            if (createdTimeout !== null) {
+                clearTimeout(createdTimeout);
+            }
+
+            @if (Config.RefreshEvery >= 0)
+            {
+                var miliSeconds = Config.RefreshEvery * 1000;
+                <text>
+                    createdTimeout = setTimeout(() => { getDashboard(); }, @miliSeconds);
+                </text>
+            }
+        }
 
         function updateStatus() {
             if (refreshed !== null) {
@@ -20,6 +34,10 @@
         }
 
         function getDashboard() {
+            if (createdTimeout !== null) {
+                clearTimeout(createdTimeout);
+            }
+
             refreshed = null;
             $('#status').html("Refreshing...");
 
@@ -28,6 +46,7 @@
                     refreshed = moment();
                     $('#container').html(data);
                     updateStatus();
+                    next();
                 })
                 .fail(function(jqXhr, textStatus, errorThrown) {
                     $('#container').html("Error: " + errorThrown);
